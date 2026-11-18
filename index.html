@@ -160,6 +160,33 @@ button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-v
 .own .body{zoom:var(--tz,1)}
 @media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
 
+/* ---------- браслет ---------- */
+#band{position:absolute;left:0;top:0;width:270px;height:868px;transform-origin:0 0}
+.band{width:270px;height:868px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--f)}
+.strap{width:148px;height:250px;background:linear-gradient(90deg,#9FA684,#C4CAAE 42%,#B3BA97 70%,#9CA382)}
+.strap.t{border-radius:46px 46px 6px 6px;margin-bottom:-12px}
+.strap.b{border-radius:6px 6px 46px 46px;margin-top:-12px;background-image:radial-gradient(circle,#8E9573 3.5px,transparent 4.5px),linear-gradient(90deg,#9FA684,#C4CAAE 42%,#B3BA97 70%,#9CA382);background-size:100% 28px,100% 100%;background-position:center 120px,0 0;background-repeat:repeat-y,no-repeat}
+.case{position:relative;z-index:1;width:256px;height:256px;border-radius:76px;background:linear-gradient(145deg,#41453D,#1C1E1A);box-shadow:0 26px 44px -20px rgba(0,0,0,.55),inset 0 2px 3px rgba(255,255,255,.14);display:grid;place-items:center}
+.bscr{position:relative;width:216px;height:216px;border-radius:60px;background:#0A0B09;overflow:hidden;color:#fff;user-select:none;-webkit-user-select:none;touch-action:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.04)}
+.bbtn{position:absolute;right:-13px;top:50%;margin-top:-34px;width:17px;height:68px;border-radius:9px;background:linear-gradient(90deg,#C8434A,#EA5158);box-shadow:inset -2px 0 0 rgba(0,0,0,.18);touch-action:none;cursor:pointer}
+.bbtn:active{transform:translateX(-3px)}
+.band.shake .case{animation:bshake .11s linear 9}
+@keyframes bshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.bpage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:2px}
+.bz{position:absolute;top:0;bottom:0;width:44px;z-index:2;cursor:pointer}
+.bz.l{left:0}.bz.r{right:0}
+.bz:hover{background:linear-gradient(90deg,rgba(255,255,255,.06),transparent)}
+.bz.r:hover{background:linear-gradient(270deg,rgba(255,255,255,.06),transparent)}
+.bdots{position:absolute;bottom:13px;left:0;right:0;display:flex;justify-content:center;gap:5px;z-index:1}
+.bdots i{width:5px;height:5px;border-radius:50%;background:#4A4D45}
+.bdots i.on{background:#fff}
+.bscr .ico{stroke:currentColor}
+.beat{animation:beat 1s ease-in-out infinite}
+@keyframes beat{0%,100%{transform:scale(1)}15%{transform:scale(1.18)}30%{transform:scale(1)}}
+.bring{animation:bring 1.6s ease-out infinite}
+@keyframes bring{0%{transform:scale(.7);opacity:.7}100%{transform:scale(1.5);opacity:0}}
+.bhint{font-size:12px;color:var(--pg-mute);text-align:center;max-width:270px;line-height:1.45;margin:0}
+
 /* ---------- Telegram Mini App: приложение на весь экран ---------- */
 html,body{height:100%;background:var(--a-bg);overscroll-behavior:none}
 body{color:var(--a-text)}
@@ -170,12 +197,17 @@ body{color:var(--a-text)}
 #app .push{top:8px}
 #app .tabbar{padding-bottom:calc(10px + env(safe-area-inset-bottom,0px))}
 #app .toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
-.sw{flex:none;display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-bottom:1px solid var(--a-line);font-family:var(--f);color:var(--a-text)}
+#bandview{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:8px 16px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,#EDEBE3,#E2E0D6)}
+#bandview[hidden]{display:none}
+#bandhold{position:relative;flex:none}
+#bandview .bhint{color:var(--a-mute)}
+.sw{flex:none;display:flex;align-items:center;gap:8px;padding:8px 10px;background:#fff;border-bottom:1px solid var(--a-line);font-family:var(--f);color:var(--a-text)}
 .sw[hidden]{display:none}
-.sw .who{flex:1;min-width:0;font-size:12px;color:var(--a-mute);line-height:1.25}
-.sw .who b{display:block;font-size:14px;color:var(--a-text)}
-.sw button{position:relative;display:flex;align-items:center;gap:6px;height:36px;padding:0 12px;border-radius:12px;background:var(--a-tint);color:var(--a-olive);font-weight:700;font-size:13px;white-space:nowrap}
+.sw .who{flex:1;min-width:0;font-size:11.5px;color:var(--a-mute);line-height:1.25}
+.sw .who b{display:block;font-size:13.5px;color:var(--a-text)}
+.sw button{position:relative;display:flex;align-items:center;gap:5px;height:36px;padding:0 10px;border-radius:12px;background:var(--a-tint);color:var(--a-olive);font-weight:700;font-size:12.5px;white-space:nowrap}
 .sw button .dot{position:absolute;top:-3px;right:-3px;width:12px;height:12px;background:var(--a-red);border:2px solid #fff}
+.sw .bico{width:34px;height:34px;border-radius:50%;background:#2C2F2A;color:#fff;display:grid;place-items:center;flex:none}
 .err{position:fixed;left:8px;right:8px;bottom:8px;z-index:99}
 </style>
 
@@ -183,6 +215,8 @@ body{color:var(--a-text)}
   <div class="sw" id="sw" hidden></div>
   <div class="screen" id="scr0"></div>
   <div class="screen" id="scr1" hidden></div>
+  <div id="bandview" hidden><div id="bandhold"><div id="band"></div></div>
+    <p class="bhint">Нажимайте у краёв экрана, чтобы листать.<br>Удерживайте красную кнопку 3 секунды — SOS.</p></div>
 </div>
 <div class="err" id="err" role="alert" hidden></div>
 
@@ -275,7 +309,7 @@ function demoTime(){
 const activeSos = () => W.sos.slice().reverse().find(s => s.status !== 'resolved');
 const sosById = id => W.sos.find(s => s.id === id);
 const member = id => W.family.find(f => f.id === id);
-function emit(){ devices.forEach(d => d.render()); updateChrome(); }
+function emit(){ devices.forEach(d => d.render()); if (band) band.render(); updateChrome(); }
 
 /* ================= данные графиков ================= */
 const DATA = {
@@ -511,7 +545,7 @@ const ACT = {
   role(d, ds){ d.st.role = ds.role; const o = devices[1 - d.i];
     if (!o.st.role){ o.st.role = ds.role === 'owner' ? 'relative' : 'owner'; o.nav(o.st.role === 'owner' ? 'A1' : 'B1', {}, 'tab'); }
     d.nav('AUTH'); },
-  hwSos(d){ const a = activeSos(); if (a){ d.nav('A7', {id:a.id, under:'A1'}, 'root'); d.toast('Сигнал SOS уже активен'); return; } sendSos('band', d); },
+  hwSos(){ showBand = true; band.idx = 4; band.render(); updateChrome(); },
   authMode(d, ds){ d.ls.mode = ds.mode; d.render(); },
   setPeriod(d, ds){ d.st.period = ds.p; d.render(); },
   setFilter(d, ds){ d.st.filter = ds.f; d.render(); },
@@ -745,7 +779,7 @@ S.A5 = {label:'А5 · SOS', group:'Владелец', role:'owner', tabs:'owner'
     <button data-act="sosPress" aria-label="Вызвать помощь" style="margin:18px 0;width:240px;height:240px;border-radius:50%;background:var(--a-red);color:#fff;box-shadow:0 0 0 18px #FBDADC,0 0 0 36px #FDEDEE;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px">
       <span style="font-size:52px;font-weight:800;letter-spacing:.02em">SOS</span><span style="font-size:18px;font-weight:700">Нажмите</span></button>
     <p class="mute" style="margin:0;font-size:16px;max-width:300px">Пока идёт отсчёт, вызов можно отменить.</p>
-    <button class="btn-link" data-act="hwSos" style="margin-top:auto">Демо: нажать кнопку SOS на браслете</button>
+    <button class="btn-link" data-act="hwSos" style="margin-top:auto">Показать браслет: SOS кнопкой на руке</button>
     <div class="note" style="text-align:left;font-size:14px">${ic('info')}<span>Приложение не заменяет экстренные службы. При угрозе жизни звоните 112.</span></div>
   </div>`}; }};
 S.A6 = {label:'А6 · Отсчёт', group:'Владелец', role:'owner', own:true,
@@ -1021,10 +1055,127 @@ S.SETTINGS = {label:'Настройки', group:'Доп. состояния', ro
     <div class="note">${ic('info')}<span>Прототип. Не выполняет реальных измерений, звонков и передачи координат. Не заменяет экстренные службы и медицинскую диагностику.</span></div>
   </div>`}; }};
 
+/* ================= браслет ================= */
+let band = null;
+const BAND_PAGES = [
+  () => `<div class="bpage">
+      <span style="position:absolute;top:22px;right:40px;width:8px;height:8px;border-radius:50%;background:#6FBF6B" title="На связи"></span>
+      <div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:#9DA583">ВТ, 17 НОЯ</div>
+      <div style="font-size:60px;font-weight:800;letter-spacing:-.04em;line-height:1;font-variant-numeric:tabular-nums">${demoTime()}</div>
+      <div style="display:flex;gap:12px;margin-top:12px;font-size:13px;font-weight:800;align-items:center">
+        <span style="display:flex;gap:3px;align-items:center;color:#F07479">${ic('heart','s')}72</span>
+        <span style="display:flex;gap:3px;align-items:center;color:#C9D0A8">${ic('steps','s')}3,5к</span>
+        <span style="display:flex;gap:3px;align-items:center;color:#C9D0A8">${ic('battery','s')}${W.battery}%</span></div></div>`,
+  () => { const v = DATA.pulse.day.vals, mn = 50, mx = 85;
+    const pts = v.map((x,i) => `${(i*120/(v.length-1)).toFixed(1)},${(30-(x-mn)/(mx-mn)*30).toFixed(1)}`).join(' ');
+    return `<div class="bpage"><span class="beat" style="color:#EA5158;display:inline-flex">${ic('heart','l')}</span>
+      <div style="font-size:56px;font-weight:800;line-height:1;margin-top:4px">72</div>
+      <div style="font-size:12px;color:#B7BCAE;font-weight:700">уд/мин · <span style="color:#8BCB87">в норме</span></div>
+      <svg viewBox="0 0 120 32" width="120" height="32" style="margin-top:6px"><polyline points="${pts}" fill="none" stroke="#EA5158" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg></div>`; },
+  () => `<div class="bpage"><span style="color:#C9D0A8;display:inline-flex">${ic('thermo','l')}</span>
+      <div style="font-size:56px;font-weight:800;line-height:1;margin-top:6px">36,6°</div>
+      <div style="font-size:12px;color:#B7BCAE;font-weight:700">температура · <span style="color:#8BCB87">в норме</span></div>
+      <div style="font-size:11px;color:#7D8276;margin-top:6px">измерено в 10:24</div></div>`,
+  () => { const C = 2*Math.PI*62;
+    return `<div class="bpage"><svg viewBox="0 0 150 150" width="150" height="150" style="position:absolute;top:33px;left:33px;transform:rotate(-90deg)">
+        <circle cx="75" cy="75" r="62" fill="none" stroke="#2A2D27" stroke-width="10"/>
+        <circle cx="75" cy="75" r="62" fill="none" stroke="#B6BE8F" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*0.3}"/></svg>
+      <span style="color:#B6BE8F;display:inline-flex">${ic('steps','s')}</span>
+      <div style="font-size:32px;font-weight:800;line-height:1.1">3 500</div>
+      <div style="font-size:11px;color:#B7BCAE;font-weight:700">из 5 000 шагов</div></div>`; },
+  () => `<div class="bpage" style="gap:10px">
+      <button data-band="hold" aria-label="Удерживайте 3 секунды, чтобы вызвать помощь" style="position:relative;z-index:3;width:108px;height:108px;border-radius:50%;background:#EA5158;color:#fff;font-size:28px;font-weight:800;box-shadow:0 0 0 8px rgba(234,81,88,.18);touch-action:none">SOS</button>
+      <div style="font-size:12px;color:#D4D7CC;font-weight:700;line-height:1.3">Удерживайте 3 с<br><span style="color:#8D9286;font-weight:600">или кнопку сбоку</span></div></div>`,
+];
+class Band {
+  constructor(el){
+    this.el = el; this.idx = 0; this.holdT0 = 0; this.timer = null; this.seen = null; this.lastKey = 'page'; this.btnDown = 0; this.fromBtn = false;
+    setHTML(el, `<div class="band"><div class="strap t"></div><div class="case"><div class="bscr" role="group" aria-label="Экран браслета"></div>
+      <button class="bbtn" data-band="btn" aria-label="Кнопка SOS на браслете: удерживайте 3 секунды"></button></div><div class="strap b"></div></div>`);
+    this.body = el.querySelector('.band'); this.scr = el.querySelector('.bscr');
+    el.addEventListener('pointerdown', e => { const t = e.target.closest('[data-band]'); if (!t) return;
+      const k = t.dataset.band; if (k === 'btn' || k === 'hold'){ e.preventDefault(); this.press(k); } });
+    window.addEventListener('pointerup', () => this.release());
+    window.addEventListener('pointercancel', () => this.release());
+    el.addEventListener('contextmenu', e => { if (e.target.closest('[data-band]')) e.preventDefault(); });
+    el.addEventListener('click', e => { const t = e.target.closest('[data-band]'); if (!t) return; const k = t.dataset.band, n = BAND_PAGES.length;
+      if (k === 'prev'){ this.idx = (this.idx + n - 1) % n; this.render(); }
+      else if (k === 'next'){ this.idx = (this.idx + 1) % n; this.render(); }
+      else if (k === 'dismiss'){ this.seen = t.dataset.id; this.idx = 0; this.render(); } });
+  }
+  press(k){
+    this.btnDown = Date.now(); this.fromBtn = k === 'btn';
+    if (activeSos()) return;
+    this.holdT0 = Date.now();
+    if (typeof haptic === 'function') haptic('light');
+    this.timer = setInterval(() => { if (Date.now() - this.holdT0 >= 3000) this.fire(); else this.render(); }, 60);
+    this.render();
+  }
+  release(){
+    if (!this.btnDown) return;
+    const short = Date.now() - this.btnDown < 400, fromBtn = this.fromBtn; this.btnDown = 0;
+    if (this.timer){ clearInterval(this.timer); this.timer = null; this.holdT0 = 0; }
+    if (short && fromBtn){ const last = W.sos[W.sos.length-1]; if (last && last.status === 'resolved') this.seen = last.id; this.idx = 0; }
+    this.render();
+  }
+  fire(){
+    clearInterval(this.timer); this.timer = null; this.holdT0 = 0; this.btnDown = 0;
+    const owner = devices.find(d => d.st.role === 'owner') || devices[0];
+    sendSos('band', owner);
+  }
+  state(){
+    if (this.holdT0) return 'hold';
+    const a = activeSos(); if (a) return a.status === 'enroute' ? 'enroute' : 'sent';
+    const last = W.sos[W.sos.length-1];
+    if (last && !last.past && last.status === 'resolved' && this.seen !== last.id) return 'resolved';
+    return 'page';
+  }
+  render(){
+    const st = this.state(); let html = '', bg = '#0A0B09';
+    if (st === 'hold'){
+      const p = Math.min(1, (Date.now() - this.holdT0)/3000), C = 2*Math.PI*84, left = Math.max(1, Math.ceil(3 - p*3));
+      bg = '#B8333B';
+      html = `<div class="bpage"><svg viewBox="0 0 190 190" width="190" height="190" style="position:absolute;top:13px;left:13px;transform:rotate(-90deg)">
+        <circle cx="95" cy="95" r="84" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="9"/>
+        <circle cx="95" cy="95" r="84" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-p)}"/></svg>
+        <div style="font-size:40px;font-weight:800;line-height:1">SOS</div><div style="font-size:30px;font-weight:800;margin-top:2px">${left}</div>
+        <div style="font-size:11px;font-weight:700;opacity:.85;margin-top:4px">Отпустите — отмена</div></div>`;
+    } else if (st === 'sent'){
+      const a = activeSos(); bg = '#EA5158';
+      html = `<div class="bpage"><span class="bring" style="position:absolute;width:150px;height:150px;border-radius:50%;border:3px solid rgba(255,255,255,.6)"></span>
+        ${ic('alert','l')}<div style="font-size:21px;font-weight:800;margin-top:6px;line-height:1.1">SOS<br>отправлен</div>
+        <div style="font-size:11.5px;font-weight:700;opacity:.92;margin-top:6px;line-height:1.3">Елена и Алексей<br>получили сигнал · ${a.time}</div></div>`;
+    } else if (st === 'enroute'){
+      const a = activeSos(); bg = '#59623F';
+      html = `<div class="bpage">${ic('car','l')}<div style="font-size:21px;font-weight:800;margin-top:6px;line-height:1.1">Елена<br>едет к вам</div>
+        <div style="font-size:11.5px;font-weight:700;opacity:.85;margin-top:6px;line-height:1.3">Оставайтесь на месте<br>с ${a.enrouteAt}</div></div>`;
+    } else if (st === 'resolved'){
+      const last = W.sos[W.sos.length-1]; bg = '#3F7240';
+      html = `<button class="bpage" data-band="dismiss" data-id="${last.id}" style="color:#fff;width:100%">
+        <span style="width:58px;height:58px;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center">${ic('check','l')}</span>
+        <div style="font-size:19px;font-weight:800;margin-top:8px;line-height:1.15">Ситуация<br>решена</div>
+        <div style="font-size:11px;font-weight:700;opacity:.8;margin-top:6px">Нажмите, чтобы закрыть</div></button>`;
+    } else {
+      html = BAND_PAGES[this.idx]() + `<button class="bz l" data-band="prev" aria-label="Предыдущий экран"></button><button class="bz r" data-band="next" aria-label="Следующий экран"></button>
+        <div class="bdots">${BAND_PAGES.map((_, i) => `<i class="${i === this.idx ? 'on' : ''}"></i>`).join('')}</div>`;
+    }
+    if (st !== this.lastKey){
+      if (st === 'sent' || st === 'enroute' || st === 'resolved'){
+        this.body.classList.remove('shake'); void this.body.offsetWidth; this.body.classList.add('shake');
+        clearTimeout(this._sh); this._sh = setTimeout(() => this.body.classList.remove('shake'), 1100);
+        if (typeof haptic === 'function') haptic(st === 'sent' ? 'error' : 'success');
+      }
+      this.lastKey = st;
+    }
+    this.scr.style.background = bg;
+    setHTML(this.scr, html);
+  }
+}
+
 /* ================= Telegram Mini App ================= */
 const tg = (window.Telegram && window.Telegram.WebApp) || null;
 const inTG = !!(tg && tg.initData);
-let active = 0;
+let active = 0, showBand = false;
 function haptic(kind){
   try { if (!inTG) return;
     if (kind === 'light' || kind === 'medium' || kind === 'heavy') tg.HapticFeedback.impactOccurred(kind);
@@ -1035,37 +1186,62 @@ function onSosHook(owner){
   haptic('error');
   owner.toast('Сигнал ушёл Елене. Переключитесь на неё вверху, чтобы ответить', 4200);
 }
+function fitBand(){
+  const v = document.getElementById('bandview'); if (v.hidden) return;
+  const h = v.clientHeight - 70, w = v.clientWidth - 32;
+  const s = Math.max(0.35, Math.min(1, h/868, w/270));
+  const hb = document.getElementById('bandhold');
+  hb.style.width = (270*s)+'px'; hb.style.height = (868*s)+'px';
+  document.getElementById('band').style.transform = `scale(${s})`;
+}
 function updateChrome(){
   const me = devices[active], other = devices[1 - active];
   const sw = document.getElementById('sw');
-  const show = me.st.role && other.st.role && S[me.cur.id].group !== 'Вход';
+  const ownerDev = devices.find(d => d.st.role === 'owner');
+  const show = me.st.role && other.st.role && (showBand || S[me.cur.id].group !== 'Вход');
   sw.hidden = !show;
   if (show){
     const nm = r => r === 'owner' ? 'Анна Ивановна' : 'Елена';
     const short = r => r === 'owner' ? 'Анну Ивановну' : 'Елену';
-    setHTML(sw, `${av(nm(me.st.role), 34)}<div class="who">Вы смотрите как<b>${nm(me.st.role)} · ${me.st.role === 'owner' ? 'владелец' : 'родственник'}</b></div>
-      <button data-sw aria-label="Переключиться">${ic('refresh','s')}На ${short(other.st.role)}${other.push ? '<span class="dot"></span>' : ''}</button>`);
+    if (showBand){
+      setHTML(sw, `<span class="bico">${ic('watch','s')}</span><div class="who">Вы смотрите<b>Браслет Анны Ивановны</b></div>
+        <button data-sw="phone">${ic('back','s')}К телефонам</button>`);
+    } else {
+      setHTML(sw, `${av(nm(me.st.role), 34)}<div class="who">Вы смотрите как<b>${nm(me.st.role)}</b></div>
+        ${ownerDev ? `<button data-sw="band" aria-label="Показать браслет">${ic('watch','s')}Браслет</button>` : ''}
+        <button data-sw="role" aria-label="Переключиться">${ic('refresh','s')}${short(other.st.role)}${other.push ? '<span class="dot"></span>' : ''}</button>`);
+    }
   }
-  devices.forEach((d, i) => { document.getElementById('scr' + i).hidden = i !== active; });
-  if (tg && tg.BackButton){ try { if (me.stack.length > 1) tg.BackButton.show(); else tg.BackButton.hide(); } catch (e) {} }
+  devices.forEach((d, i) => { document.getElementById('scr' + i).hidden = showBand || i !== active; });
+  document.getElementById('bandview').hidden = !showBand;
+  fitBand();
+  if (tg && tg.BackButton){ try { if (showBand || me.stack.length > 1) tg.BackButton.show(); else tg.BackButton.hide(); } catch (e) {} }
 }
 document.getElementById('sw').addEventListener('click', e => {
-  if (!e.target.closest('[data-sw]')) return;
-  active = 1 - active; haptic('light');
-  devices[active].render(); updateChrome();
+  const t = e.target.closest('[data-sw]'); if (!t) return; haptic('light');
+  const k = t.dataset.sw;
+  if (k === 'band'){ showBand = true; band.render(); }
+  else if (k === 'phone'){ showBand = false; }
+  else { active = 1 - active; devices[active].render(); }
+  updateChrome();
 });
 
 W = freshWorld();
 devices.push(new Device(0), new Device(1));
+band = new Band(document.getElementById('band'));
+band.render();
 devices.forEach(d => d.render(true));
 updateChrome();
+window.addEventListener('resize', fitBand);
+setInterval(() => { if (band && band.state() === 'page' && band.idx === 0) band.render(); }, 15000);
 
 if (tg){
   try { tg.ready(); tg.expand(); } catch (e) {}
   try { tg.setHeaderColor('#F5F4EF'); tg.setBackgroundColor('#F5F4EF'); } catch (e) {}
   try { if (tg.setBottomBarColor) tg.setBottomBarColor('#FFFFFF'); } catch (e) {}
   try { if (tg.disableVerticalSwipes) tg.disableVerticalSwipes(); } catch (e) {}
-  try { tg.BackButton.onClick(() => devices[active].back()); } catch (e) {}
+  try { tg.BackButton.onClick(() => { if (showBand){ showBand = false; updateChrome(); } else devices[active].back(); }); } catch (e) {}
+  try { tg.onEvent('viewportChanged', fitBand); } catch (e) {}
 }
 } catch (e) { showErr(e && e.message ? e.message : String(e)); }
 })();
