@@ -171,6 +171,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,[tabindex]:focus-v
 .bbtn{position:absolute;right:-13px;top:50%;margin-top:-34px;width:17px;height:68px;border-radius:9px;background:linear-gradient(90deg,#C8434A,#EA5158);box-shadow:inset -2px 0 0 rgba(0,0,0,.18);touch-action:none;cursor:pointer}
 .bbtn:active{transform:translateX(-3px)}
 .band.shake .case{animation:bshake .11s linear 9}
+.band.shakeloop .case{animation:bshake .11s linear infinite}
 @keyframes bshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 .bpage{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;gap:2px}
 .bz{position:absolute;top:0;bottom:0;width:44px;z-index:2;cursor:pointer}
@@ -216,6 +217,7 @@ body{color:var(--a-text)}
   <div class="screen" id="scr0"></div>
   <div class="screen" id="scr1" hidden></div>
   <div id="bandview" hidden><div id="bandhold"><div id="band"></div></div>
+    <button class="hw" id="fallbtn"><span style="background:#E07B2C;box-shadow:0 0 0 3px rgba(224,123,44,.2)"></span>Имитировать падение</button>
     <p class="bhint">Нажимайте у краёв экрана, чтобы листать.<br>Удерживайте красную кнопку 3 секунды — SOS.</p></div>
 </div>
 <div class="err" id="err" role="alert" hidden></div>
@@ -267,6 +269,7 @@ const P = {
   signal:'<path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 20V4"/>',
   lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
   moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z"/>',
+  fall:'<circle cx="15" cy="4.5" r="2"/><path d="M13.5 8 8 10.5l2.5 4.5-4 6"/><path d="M10.5 15l5.5-.5 2.5 5.5"/><path d="M8 10.5 4 9"/><path d="M2 22h20"/>',
   trash:'<path d="M3 6h18M8 6V4h8v2M6 6l1 15h10l1-15"/>',
 };
 const ic = (n, cls='') => `<svg class="ico ${cls}" viewBox="0 0 24 24" aria-hidden="true">${P[n]||''}</svg>`;
@@ -616,7 +619,7 @@ function sendSos(source, owner){
   const s = {id:'s'+Date.now(), label:'Сегодня, '+t, time:t, source, status:'sent', sentAt:t};
   W.sos.push(s);
   W.events.unshift({id:'e'+s.id, type:'sos', sosId:s.id});
-  devices.forEach(x => { if (x !== owner && x.st.role !== 'owner') x.push = {kind:'sos', id:s.id, title:'SOS — Анна Ивановна', text:`Требуется помощь · ${t} · ул. Лесная, 12`}; });
+  devices.forEach(x => { if (x !== owner && x.st.role !== 'owner') x.push = {kind:'sos', id:s.id, title: source === 'fall' ? 'Падение — Анна Ивановна' : 'SOS — Анна Ивановна', text: source === 'fall' ? `Не ответила 5 с · ${t} · ул. Лесная, 12` : `Требуется помощь · ${t} · ул. Лесная, 12`}; });
   owner.st.role = 'owner';
   owner.nav('A7', {id:s.id, under:'A1'}, 'root');
   emit();
@@ -811,7 +814,7 @@ S.A7 = {label:'А7 · Помощь вызвана', group:'Владелец', ro
     </div>
     <div class="pad" style="padding-top:20px">
       <div class="card" style="display:flex;flex-direction:column;gap:16px">
-        ${s.source==='band'?step(true,'Сигнал с браслета получен',`Кнопка на браслете · ${s.time}`):step(true,'SOS отправлен из приложения',s.time)}
+        ${s.source==='fall'?step(true,'Браслет обнаружил падение',`Вы не ответили 5 секунд · ${s.time}`):s.source==='band'?step(true,'Сигнал с браслета получен',`Кнопка на браслете · ${s.time}`):step(true,'SOS отправлен из приложения',s.time)}
         ${step(true,'Уведомлены: Елена, Алексей','Адрес: ул. Лесная, 12')}
         ${step(going, going?'Елена: «Я уже еду»':'Ждём ответа близких', going?s.enrouteAt:'')}
         ${step(done, done?'Ситуация решена':'Помощь оказана', done?s.resolvedAt:'Отметит родственник')}
@@ -908,7 +911,7 @@ S.B4 = {label:'Б4 · SOS-уведомление', group:'Родственник
       <div style="width:76px;height:76px;margin:0 auto;border-radius:50%;background:rgba(255,255,255,.22);display:grid;place-items:center">${ic(done?'check':'alert','l').replace('ico l','ico" style="width:40px;height:40px')}</div>
       <div style="font-size:26px;font-weight:800;margin-top:12px;line-height:1.15">${done?'Ситуация решена':'SOS — требуется помощь'}</div>
       <div style="font-weight:700;margin-top:8px;font-size:17px">Анна Ивановна</div>
-      <div style="opacity:.92">${s.label}${s.source==='band'?' · кнопка на браслете':' · из приложения'}</div>
+      <div style="opacity:.92">${s.label}${s.source==='fall'?' · падение, нет ответа 5 с':s.source==='band'?' · кнопка на браслете':' · из приложения'}</div>
       ${done?`<div style="margin-top:10px;font-size:14px;opacity:.95">Закрыто: ${s.responder}, ${s.resolvedAt}</div>`:''}
     </div>
     <button class="card tap row" data-go="B3" style="text-align:left;padding:14px 16px"><span style="color:var(--a-olive)">${ic('pin')}</span><span class="grow"><span class="sm mute" style="display:block">Местоположение в момент SOS</span><b>${W.loc.addr}</b></span>${ic('chevR','chev')}</button>
@@ -922,7 +925,7 @@ const EV_ICON = {sos:['alert','#FCE6E7','var(--a-red)'], pulse:['heart','#FCE6E7
 function evView(e){
   if (e.type === 'sos'){ const s = sosById(e.sosId);
     const st = s.status === 'resolved' ? `<span class="pill gray">Решено</span>` : s.status === 'enroute' ? `<span class="pill ok">Вы в пути</span>` : `<span class="pill red">Требуется помощь</span>`;
-    return {title:'SOS-уведомление', sub: st, when: s.label, go:`data-go="B4" data-arg="${s.id}"`, group:'sos'}; }
+    return {title: s.source === 'fall' ? 'Падение · SOS' : 'SOS-уведомление', sub: st, when: s.label, go:`data-go="B4" data-arg="${s.id}"`, group:'sos'}; }
   return {title:e.title, sub:`<span class="sm mute">${e.sub}</span>`, when:e.when, go:`data-go="EVENT" data-arg="${e.id}"`, group:e.group};
 }
 S.B5 = {label:'Б5 · События', group:'Родственник', role:'relative', tabs:'rel', tab:'B5', render(d){
@@ -1094,13 +1097,15 @@ class Band {
       <button class="bbtn" data-band="btn" aria-label="Кнопка SOS на браслете: удерживайте 3 секунды"></button></div><div class="strap b"></div></div>`);
     this.body = el.querySelector('.band'); this.scr = el.querySelector('.bscr');
     el.addEventListener('pointerdown', e => { const t = e.target.closest('[data-band]'); if (!t) return;
-      const k = t.dataset.band; if (k === 'btn' || k === 'hold'){ e.preventDefault(); this.press(k); } });
+      const k = t.dataset.band; if (this.fallT0 && k === 'btn'){ e.preventDefault(); this.fallCancel(); return; }
+      if (k === 'btn' || k === 'hold'){ e.preventDefault(); this.press(k); } });
     window.addEventListener('pointerup', () => this.release());
     window.addEventListener('pointercancel', () => this.release());
     el.addEventListener('contextmenu', e => { if (e.target.closest('[data-band]')) e.preventDefault(); });
     el.addEventListener('click', e => { const t = e.target.closest('[data-band]'); if (!t) return; const k = t.dataset.band, n = BAND_PAGES.length;
       if (k === 'prev'){ this.idx = (this.idx + n - 1) % n; this.render(); }
       else if (k === 'next'){ this.idx = (this.idx + 1) % n; this.render(); }
+      else if (k === 'fallok'){ this.fallCancel(); }
       else if (k === 'dismiss'){ this.seen = t.dataset.id; this.idx = 0; this.render(); } });
   }
   press(k){
@@ -1123,9 +1128,35 @@ class Band {
     const owner = devices.find(d => d.st.role === 'owner') || devices[0];
     sendSos('band', owner);
   }
+  fall(){
+    if (activeSos() || this.fallT0) return;
+    this.fallT0 = Date.now(); this._left = 6;
+    this.fallTimer = setInterval(() => {
+      const el = Date.now() - this.fallT0;
+      if (el >= 5000){ this.fallFire(); return; }
+      const left = Math.ceil((5000 - el)/1000);
+      if (left !== this._left){ this._left = left; if (typeof haptic === 'function') haptic('heavy'); }
+      this.render();
+    }, 100);
+    if (typeof haptic === 'function') haptic('warning');
+    this.render();
+  }
+  fallCancel(){
+    clearInterval(this.fallTimer); this.fallTimer = null; this.fallT0 = 0;
+    this.okUntil = Date.now() + 2500; setTimeout(() => this.render(), 2600);
+    if (typeof haptic === 'function') haptic('success');
+    this.render();
+  }
+  fallFire(){
+    clearInterval(this.fallTimer); this.fallTimer = null; this.fallT0 = 0;
+    const owner = devices.find(d => d.st.role === 'owner') || devices[0];
+    sendSos('fall', owner);
+  }
   state(){
     if (this.holdT0) return 'hold';
+    if (this.fallT0) return 'fall';
     const a = activeSos(); if (a) return a.status === 'enroute' ? 'enroute' : 'sent';
+    if (this.okUntil && Date.now() < this.okUntil) return 'fallok';
     const last = W.sos[W.sos.length-1];
     if (last && !last.past && last.status === 'resolved' && this.seen !== last.id) return 'resolved';
     return 'page';
@@ -1149,6 +1180,21 @@ class Band {
       const a = activeSos(); bg = '#59623F';
       html = `<div class="bpage">${ic('car','l')}<div style="font-size:21px;font-weight:800;margin-top:6px;line-height:1.1">Елена<br>едет к вам</div>
         <div style="font-size:11.5px;font-weight:700;opacity:.85;margin-top:6px;line-height:1.3">Оставайтесь на месте<br>с ${a.enrouteAt}</div></div>`;
+    } else if (st === 'fall'){
+      const el = Date.now() - this.fallT0, left = Math.max(1, Math.ceil((5000 - el)/1000)), C = 2*Math.PI*90;
+      bg = (Math.floor(el/500) % 2) ? '#C8661F' : '#E07B2C';
+      html = `<div class="bpage" style="gap:0">
+        <svg viewBox="0 0 200 200" width="200" height="200" style="position:absolute;top:8px;left:8px;transform:rotate(-90deg)">
+          <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="6"/>
+          <circle cx="100" cy="100" r="90" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*Math.min(1, el/5000)}"/></svg>
+        <span style="display:inline-flex">${ic('fall')}</span>
+        <div style="font-size:15px;font-weight:800;line-height:1.1;margin-top:2px">Обнаружено<br>падение</div>
+        <div style="font-size:11px;font-weight:700;opacity:.9;margin-top:2px">SOS через <b style="font-size:15px">${left}</b> с</div>
+        <button data-band="fallok" style="position:relative;z-index:3;margin-top:8px;height:34px;padding:0 16px;border-radius:17px;background:#fff;color:#B8541A;font-weight:800;font-size:13px">Я в порядке</button></div>`;
+    } else if (st === 'fallok'){
+      bg = '#2E3A2B';
+      html = `<div class="bpage">${ic('check','l')}<div style="font-size:18px;font-weight:800;margin-top:6px;line-height:1.15">Вызов<br>отменён</div>
+        <div style="font-size:11px;font-weight:700;opacity:.8;margin-top:6px">Хорошо, что всё в порядке</div></div>`;
     } else if (st === 'resolved'){
       const last = W.sos[W.sos.length-1]; bg = '#3F7240';
       html = `<button class="bpage" data-band="dismiss" data-id="${last.id}" style="color:#fff;width:100%">
@@ -1167,6 +1213,7 @@ class Band {
       }
       this.lastKey = st;
     }
+    this.body.classList.toggle('shakeloop', st === 'fall');
     this.scr.style.background = bg;
     setHTML(this.scr, html);
   }
@@ -1188,7 +1235,7 @@ function onSosHook(owner){
 }
 function fitBand(){
   const v = document.getElementById('bandview'); if (v.hidden) return;
-  const h = v.clientHeight - 70, w = v.clientWidth - 32;
+  const h = v.clientHeight - 120, w = v.clientWidth - 32;
   const s = Math.max(0.35, Math.min(1, h/868, w/270));
   const hb = document.getElementById('bandhold');
   hb.style.width = (270*s)+'px'; hb.style.height = (868*s)+'px';
@@ -1233,6 +1280,7 @@ band.render();
 devices.forEach(d => d.render(true));
 updateChrome();
 window.addEventListener('resize', fitBand);
+document.getElementById('fallbtn').addEventListener('click', () => { if (!activeSos()) band.fall(); });
 setInterval(() => { if (band && band.state() === 'page' && band.idx === 0) band.render(); }, 15000);
 
 if (tg){
